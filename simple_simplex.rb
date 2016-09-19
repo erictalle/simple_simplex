@@ -1,3 +1,9 @@
+#SimpleSimplex is a class that solves very basic max LP problems.  It's designed
+#to show the tablaeus as the problem is solved.  This should not be used for 
+#large scale problems.  This was more for me to entertain myself and to learn 
+#a bit about Ruby and Linear Programming.  Hopefully it can be used as a learning 
+#tool for the interested.
+#
 
 class SimpleSimplex
 	def initialize(input)
@@ -88,12 +94,14 @@ private
 end
 
 #example usage
-# lp = SimpleSimplex.new([[1,2,1,0,0,0,16],
-# 												[1,1,0,1,0,0,9],
-# 												[3,2,0,0,1,0,24],
-# 												[-40,-30,0,0,0,1,0],
-# 												["x1","x2","s1","s2","s3","z","rhs"]])
-# lp.solve
+lp = SimpleSimplex.new([[1,2,1,0,0,0,16],
+												[1,1,0,1,0,0,9],
+												[3,2,0,0,1,0,24],
+												[-40,-30,0,0,0,1,0],
+												["x1","x2","s1","s2","s3","z","rhs"]])
+lp.solve
+
+__END__
 
 
 
