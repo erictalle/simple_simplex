@@ -14,4 +14,48 @@ describe SimpleSimplex do
   		expect(@lp).to be_an_instance_of(SimpleSimplex)
   	end
   end
+
+  describe "#current_rhs" do
+  	expected_rhs = [16,9,24]
+  	it "returns the current rhs of the current tableau" do
+  		expect(@lp.current_rhs).to match_array expected_rhs
+  	end
+  end
+
+  describe "#solve" do
+  	optimal_z_value = 330
+  	it "returns the optimal z value for the objective function" do
+  		expect(@lp.solve).to eq(optimal_z_value)
+  	end
+  end
+
+  describe "#pivot" do
+  	expected_first_row_rhs = 8
+  	it "pivots the tableau and changes finds a new basic solution and rhs" do
+  		@lp.pivot
+  		expect(@lp.raw_tableau[0][-1].to_i).to equal(expected_first_row_rhs)
+  	end
+  end
+
+  describe "#optimal? where not" do
+  	it "after first pivot, it should return that the current tableau is not optimal" do
+  		@lp.pivot
+  		expect(@lp.optimal?).to be false
+  	end
+  end
+
+  describe "#optimal? where it is" do
+  	it "after two pivots, it should return that the current tableau is optimal" do
+  		2.times {@lp.pivot}
+  		expect(@lp.optimal?).to be true
+  	end
+  end
+
+  describe "#current_z_value" do
+  	it "after one pivot, the z value should be reported accurately" do
+  		expected_z_value = 320
+  		@lp.pivot
+  		expect(@lp.current_z_value.to_i).to equal(expected_z_value)
+  	end
+  end
 end

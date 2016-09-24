@@ -1,12 +1,15 @@
 #SimpleSimplex is a class that solves very basic max LP problems.  It's designed
-#to show the tablaeus as the problem is solved.  This should not be used for 
+#to show the tableaus as the problem is solved.  This should not be used for 
 #large scale problems.  This was more for me to entertain myself and to learn 
 #a bit about Ruby and Linear Programming.  Hopefully it can be used as a learning 
 #tool for the interested.
 #
 
 class SimpleSimplex
+	attr_accessor :show_tableau
+	
 	def initialize(input)
+		@show_tableau = false
 		if input.kind_of?(Array)
 			@lp = input
 		elsif input.kind_of?(String)  #file name or url
@@ -14,20 +17,29 @@ class SimpleSimplex
 		end
 	end
 
+	def raw_tableau
+		return @lp
+	end
+
 	def solve
-		puts "Initial tablaeu..."
-		print_tablaeu
+		if @show_tableau
+			puts "Initial tableau..."
+			print_tableau
+		end
 		while !optimal?
 			pivot
 		end
-		puts ">>>>>> z = #{print_rational(current_z_value)}"
+		if @show_tableau
+			puts ">>>>>> z = #{print_rational(current_z_value)}"
+		end
+		current_z_value
 	end
 
 	def current_rhs
-		@lp[0..-2].collect{|row| row[-2]}
+		@lp[0..-3].collect{|row| row[-1]}
 	end	
 
-	def print_tablaeu
+	def print_tableau
 		@lp[-1].each {|e| print "#{e}\t"}
 		puts ""
 		puts "-----------------------------------------------------"
@@ -45,7 +57,9 @@ class SimpleSimplex
 		pivot_row_index = pi[0]
 		pivot_column_index = pi[1]
 		pivot_scaler = @lp[pivot_row_index][pivot_column_index]	
-		puts "\npivot: #{pivot_scaler} @ location: (#{pivot_row_index},#{pivot_column_index})" 
+		if @show_tableau
+			puts "\npivot: #{pivot_scaler} @ location: (#{pivot_row_index},#{pivot_column_index})" 
+		end
 		pivot_row = @lp[pivot_row_index].collect! {|n| n.to_r/pivot_scaler.to_r}
 
 		@lp[0..-2].each_with_index do |row,index|
@@ -54,10 +68,11 @@ class SimpleSimplex
 				new_row = ero(scaler, pivot_row, index)	
 			end
 		end	
-		print_tablaeu
+		if @show_tableau
+			print_tableau
+		end
 	end
 
-private
 	def print_rational(rational_number)
 		rational_number.to_r
 		if rational_number.numerator == 0
@@ -99,6 +114,8 @@ end
 # 												[3,2,0,0,1,0,24],
 # 												[-40,-30,0,0,0,1,0],
 # 												["x1","x2","s1","s2","s3","z","rhs"]])
+# lp.show_tableau = true
+# puts "#{lp.current_rhs}"
 # lp.solve
 # use rspec spec to run tests
 
