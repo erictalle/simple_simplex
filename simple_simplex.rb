@@ -15,7 +15,7 @@ class SimpleSimplex
 		if input.kind_of?(Array)
 			@lp = input
 		else
-			raise "Input is a String!  Nothing implemented yet for anyother input."
+			raise "Input is a String!  Nothing implemented yet for any other than Array."
 		end
 	end
 
@@ -75,7 +75,7 @@ class SimpleSimplex
 	end
 
 	def current_basis
-		basis = []
+		basis = {}
 		transpose = []
 		m = []
 		@lp.each do |r|
@@ -84,8 +84,10 @@ class SimpleSimplex
 		transpose = m.transpose.to_a
 
 		transpose.each do |col|
-			if column_basic?(col)
-				basis << col[-1]
+			basic_row_index = column_basic?(col)
+			if basic_row_index
+				puts "#{col[-1]} : #{basic_row_index}"
+				basis[col[-1].to_sym] = @lp[basic_row_index][-1].to_f
 			end
 		end
 		return basis	
@@ -94,7 +96,7 @@ class SimpleSimplex
 	def column_basic?(ary)
 		if(ary[0..-2].count(0) == ary.length - 2)
 			unless ary.index(1).nil?
-				return true
+				return ary.index(1)
 			end
 		end
 		return false
@@ -130,7 +132,7 @@ class SimpleSimplex
 end
 
 
-__END__
+
 #example usage
 lp = SimpleSimplex.new([[1,2,1,0,0,0,16],
 												[1,1,0,1,0,0,9],
@@ -142,4 +144,4 @@ solution = lp.solve
 puts "solution: #{solution}"
 
 # use rspec spec to run tests
-
+__END__
