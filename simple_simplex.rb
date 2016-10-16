@@ -86,7 +86,6 @@ class SimpleSimplex
 		transpose.each do |col|
 			basic_row_index = column_basic?(col)
 			if basic_row_index
-				puts "#{col[-1]} : #{basic_row_index}"
 				basis[col[-1].to_sym] = @lp[basic_row_index][-1].to_f
 			end
 		end

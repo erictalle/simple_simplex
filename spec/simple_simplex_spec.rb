@@ -23,17 +23,9 @@ describe SimpleSimplex do
   end
 
   describe "#solve" do
-  	optimal_z_value = 330
+  	optimal_z_value = 330.0
   	it "returns the optimal z value for the objective function" do
-  		expect(@lp.solve).to eq(optimal_z_value)
-  	end
-  end
-
-  describe "#pivot" do
-  	expected_first_row_rhs = 8
-  	it "pivots the tableau and changes finds a new basic solution and rhs" do
-  		@lp.pivot
-  		expect(@lp.raw_tableau[0][-1].to_i).to equal(expected_first_row_rhs)
+  		expect(@lp.solve[:max_z]).to eq(optimal_z_value)
   	end
   end
 
@@ -57,5 +49,12 @@ describe SimpleSimplex do
   		@lp.pivot
   		expect(@lp.current_z_value.to_i).to equal(expected_z_value)
   	end
+  end
+
+  describe "#current_basis" do
+    it "after the lp has been solved, the basis should be reported correctly" do
+      expected_x1_value = 6.0
+      expect(@lp.solve[:basis][:x1]).to equal expected_x1_value
+    end
   end
 end
