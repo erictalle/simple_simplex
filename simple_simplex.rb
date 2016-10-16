@@ -132,7 +132,7 @@ class SimpleSimplex
 end
 
 
-
+__END__
 #example usage
 lp = SimpleSimplex.new([[1,2,1,0,0,0,16],
 												[1,1,0,1,0,0,9],
@@ -144,4 +144,4 @@ solution = lp.solve
 puts "solution: #{solution}"
 
 # use rspec spec to run tests
-__END__
+
